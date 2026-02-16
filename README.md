@@ -1,18 +1,20 @@
 # marginbt
 
-Margin-aware execution backtest engine with VBT-like ergonomics.
+A powerful Python backtesting engine designed for margin accounts. I built this to bridge the gap between VectorBT's ease of use and the complex requirements of margin-aware execution.
 
 ## Overview
 
-`marginbt` is a Python library for backtesting trading strategies with a focus on margin requirements, liquidations, and flexible position sizing. I aim to provide the power of low-level execution logic while maintaining the ease of use of VectorBT.
+`marginbt` is a professional-grade backtesting engine designed for high-precision execution simulation. While many libraries focus on signal generation, I built `marginbt` to solve the complex challenges of **risk-controlled execution**—handling leveraged margin, automated circuit breakers, and deterministic conflict resolution that standard backtesters often oversimplify.
 
 ## Key Features
 
-- **Margin Management**: Track maintenance margin, initial margin, and leverage.
-- **Liquidation Logic**: Simulate liquidations based on margin ratios.
-- **Flexible Sizing**: Support for percent of equity, absolute units, and more.
-- **VBT-like Ergonomics**: Simple API for running backtests from signals or rules.
-- **Deterministic Verification**: Regression snapshots to ensure consistency over time.
+- **Advanced Risk Controls**: Built-in "Daily Loss Limit" (circuit breaker) and "Global Kill-Switch" (drawdown-based halt) to protect capital.
+- **Precision Margin Engine**: Real-time tracking of initial and maintenance margin with realistic liquidation simulation and fees.
+- **Robust Conflict Resolution**: Configurable "Same-bar Conflict Policy" (e.g., risk-first) to handle scenarios where SL and TP are both triggered within the same bar.
+- **Dynamic Risk Sizing**: Automatically calculate position sizes based on equity percentage at risk, taking the Stop-Loss distance into account.
+- **Gap-Aware Execution**: Handle price gaps with configurable policies (e.g., filling at bar open if price gaps past your SL).
+- **Deterministic Verification**: Integration with a regression snapshot system to ensure your backtest results remain consistent as you develop.
+- **VBT-like Ergonomics**: A familiar and simple API for researchers coming from VectorBT, but with much deeper execution control.
 
 ## Inspiration
 
