@@ -1,0 +1,29 @@
+{
+  "backtest_engine": {
+    "meta": {
+      "allow_short": true,
+      "attempted_signals": 359,
+      "dynamic_min_notional_enabled": true,
+      "engine": "rule_based_execution",
+      "executed_signals": 0,
+      "forced_close_by_risk_control": 0,
+      "instrument": "PAXG_USDT_Perp",
+      "liquidation_count": 0,
+      "risk_halt_daily_count": 0,
+      "risk_halt_global_triggered": false,
+      "skipped_invalid_sl": 0,
+      "skipped_min_qty": 0,
+      "skipped_missing_min_table": 358,
+      "skipped_total": 359
+    },
+    "stats": {
+      "Active Transaction Days": 0,
+      "Market Open Days": 15,
+      "Max Drawdown [%]": -0.0,
+      "Sharpe Ratio": "-Inf",
+      "Total Return [%]": 0.0,
+      "Total Trades": 0,
+      "Win Rate [%]": "NaN"
+    }
+  }
+}
