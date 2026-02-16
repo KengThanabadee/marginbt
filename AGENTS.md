@@ -24,13 +24,13 @@
 
 ## Testing Guidelines
 - Add tests in `tests/` as either:
-  - `pytest`-discoverable files named `test_*.py`, or
-  - executable verification scripts with a `main()` returning non-zero on failure.
+  - executable verification scripts with a `main()` returning non-zero on failure (current project pattern), or
+  - `pytest`-discoverable files named `test_*.py` for new unit-style coverage.
 - Use fixed inputs and seeded/deterministic series for backtest assertions.
 - For behavior changes, update `tests/fixtures/regression_snapshot.json` only with clear rationale in the PR.
 
 ## Commit & Pull Request Guidelines
-- Local Git history is not available in this workspace snapshot; use Conventional Commit style going forward (for example, `feat(engine): add liquidation guard`).
+- Use Conventional Commit style (for example, `feat(engine): add liquidation guard`).
 - Keep commits small and single-purpose.
 - PRs should include:
   - what changed and why,
