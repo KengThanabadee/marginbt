@@ -17,6 +17,7 @@ Quick start::
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from typing import Any
 
@@ -34,20 +35,22 @@ from marginbt.execution.rule_based.types import (
     StopEntryPrice,
 )
 
+logger = logging.getLogger(__name__)
+
 
 @dataclass(frozen=True)
 class EngineConfig:
     """All engine-level settings grouped for serialization/logging."""
 
-    init_cash: float = 100.0
+    init_cash: float = 10_000.0
     fees: float = 0.00045
     slippage: float = 0.0002
     freq: str = "1h"
-    leverage: float = 10.0
+    leverage: float = 1.0
     maintenance_margin_rate: float = 0.005
     liquidation_fee_rate: float = 0.0
-    daily_loss_limit_pct: float = 0.015
-    kill_switch_drawdown_pct: float = 0.015
+    daily_loss_limit_pct: float = 1.0
+    kill_switch_drawdown_pct: float = 1.0
     risk_free_annual: float = 0.03
     year_days: int = 365
     gap_sl_policy: GapSLPolicy = "bar_open"
@@ -60,7 +63,7 @@ class BacktestEngine:
     Parameters
     ----------
     init_cash : float
-        Starting capital (default 100 USDT).
+        Starting capital (default 10,000 USDT).
     fees : float
         Fee rate per side, e.g. 0.00045 = 0.045%.
     slippage : float
@@ -68,19 +71,26 @@ class BacktestEngine:
     freq : str
         Bar frequency label (for display only, e.g. ``"1h"``).
     leverage : float
-        Maximum leverage.  Used for position-size cap and margin accounting.
+        Maximum leverage (default 1 = no leverage).  Used for position-size
+        cap and margin accounting.  Set to e.g. ``10`` for 10x leveraged trading.
     maintenance_margin_rate : float
         Exchange maintenance-margin rate for liquidation check.
     liquidation_fee_rate : float
         Extra fee charged on liquidation events.
     daily_loss_limit_pct : float
         Intraday loss threshold that halts new entries for the rest of the day.
+        Default ``1.0`` (100%%, effectively disabled).  Set to e.g. ``0.015``
+        to halt after a 1.5%% intraday loss.
     kill_switch_drawdown_pct : float
         Peak-to-trough drawdown threshold that halts the strategy globally.
+        Default ``1.0`` (100%%, effectively disabled).  Set to e.g. ``0.015``
+        to halt after a 1.5%% drawdown.
     risk_free_annual : float
         Annual risk-free rate used in Sharpe calculation.
     year_days : int
-        Calendar days per year (365 for crypto).
+        Calendar days per year used for annualization.
+        - Crypto: 365 (Default)
+        - Stocks/Forex: 252 or 260
     gap_sl_policy : str
         How to fill a stop that gaps past the stop level (``"bar_open"``).
     same_bar_conflict_policy : str
@@ -89,15 +99,15 @@ class BacktestEngine:
 
     def __init__(
         self,
-        init_cash: float = 100.0,
+        init_cash: float = 10_000.0,
         fees: float = 0.00045,
         slippage: float = 0.0002,
         freq: str = "1h",
-        leverage: float = 10.0,
+        leverage: float = 1.0,
         maintenance_margin_rate: float = 0.005,
         liquidation_fee_rate: float = 0.0,
-        daily_loss_limit_pct: float = 0.015,
-        kill_switch_drawdown_pct: float = 0.015,
+        daily_loss_limit_pct: float = 1.0,
+        kill_switch_drawdown_pct: float = 1.0,
         risk_free_annual: float = 0.03,
         year_days: int = 365,
         gap_sl_policy: GapSLPolicy = "bar_open",
@@ -142,10 +152,10 @@ class BacktestEngine:
         stop_entry_price: StopEntryPrice = "fillprice",
         size: float | None = None,
         size_type: SizeType = "risk",
-        risk_per_trade: float = 0.0025,
+        risk_per_trade: float = 0.01,
         direction: str = "longonly",
         min_qty: float | None = None,
-        enforce_min_constraints: bool = True,
+        enforce_min_constraints: bool = False,
         skip_if_below_min: bool = True,
         instrument: str | None = None,
     ) -> BacktestResult:
@@ -190,7 +200,7 @@ class BacktestEngine:
             ``"amount"`` = fixed qty, ``"value"`` = fixed notional,
             ``"percent"`` = fraction of equity as notional.
         risk_per_trade : float
-            Fraction of equity risked per trade (default 0.25%).
+            Fraction of equity risked per trade (default 1%).
             Only used when ``size_type="risk"``.
         direction : str
             ``"longonly"``, ``"shortonly"``, or ``"both"``.
@@ -280,6 +290,8 @@ class BacktestEngine:
             "freq": cfg.freq,
             "direction": direction,
         }
+
+        logger.info("Running backtest: bars=%d instrument=%s freq=%s", len(idx), instrument, cfg.freq)
 
         return run_rule_based_execution(
             index=idx,

@@ -8,11 +8,10 @@
 - Tests and fixtures: `tests/` with deterministic fixture data in `tests/fixtures/regression_snapshot.json`.
 
 ## Build, Test, and Development Commands
-- Install runtime deps: `pip install -r requirements.txt`
 - Install package + dev deps: `pip install -e .[dev]`
-- Run all pytest-style tests: `pytest -q`
-- Run script-based edge checks: `python tests/edge_cases.py`
-- Run metric semantics check: `python tests/metrics_semantics.py`
+- Run all tests: `pytest -q`
+- Lint code: `ruff check marginbt/ tests/`
+- Type-check code: `mypy marginbt/`
 - Verify regression snapshot: `python tests/regression_snapshot.py --mode verify`
 - Refresh regression snapshot intentionally: `python tests/regression_snapshot.py --mode capture`
 
@@ -23,9 +22,8 @@
 - Prefer explicit, deterministic numeric handling (see snapshot and metric tests).
 
 ## Testing Guidelines
-- Add tests in `tests/` as either:
-  - executable verification scripts with a `main()` returning non-zero on failure (current project pattern), or
-  - `pytest`-discoverable files named `test_*.py` for new unit-style coverage.
+- Write tests as `pytest`-discoverable files named `test_*.py` in the `tests/` directory.
+- Use shared fixtures from `tests/conftest.py` for common OHLC data and config objects.
 - Use fixed inputs and seeded/deterministic series for backtest assertions.
 - For behavior changes, update `tests/fixtures/regression_snapshot.json` only with clear rationale in the PR.
 

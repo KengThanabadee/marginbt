@@ -24,14 +24,11 @@ This project is deeply inspired by the excellent [vectorbt](https://github.com/p
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/marginbt.git
+git clone https://github.com/KengThanabadee/marginbt.git
 cd marginbt
 
-# Install dependencies
-pip install -r requirements.txt
-
-# Install the package in editable mode
-pip install -e .
+# Install the package and dev dependencies
+pip install -e .[dev]
 ```
 
 ## Quick Start
@@ -46,8 +43,8 @@ close = pd.Series([100, 101, 102, 101, 100, 99, 98], name='Close')
 entries = pd.Series([True, False, False, False, False, False, False])
 exits = pd.Series([False, False, False, False, True, False, False])
 
-# Initialize engine
-engine = mbt.BacktestEngine(init_cash=1000, leverage=10)
+# Initialize engine (defaults: 10k USDT, no leverage, 1% risk)
+engine = mbt.BacktestEngine()
 
 # Run backtest
 result = engine.run(close=close, entries=entries, exits=exits)

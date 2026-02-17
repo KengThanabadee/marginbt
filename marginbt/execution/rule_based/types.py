@@ -13,7 +13,7 @@ StopEntryPrice = Literal["fillprice", "close", "open"]
 
 @dataclass(frozen=True)
 class MarginConfig:
-    leverage: float = 10.0
+    leverage: float = 1.0
     maintenance_margin_rate: float = 0.005
     liquidation_fee_rate: float = 0.0
 
@@ -22,8 +22,8 @@ class MarginConfig:
 class MetricsConfig:
     risk_free_annual: float = 0.03
     year_days: int = 365
-    daily_loss_limit_pct: float = 0.015
-    kill_switch_drawdown_pct: float = 0.015
+    daily_loss_limit_pct: float = 1.0
+    kill_switch_drawdown_pct: float = 1.0
 
 
 @dataclass(frozen=True)

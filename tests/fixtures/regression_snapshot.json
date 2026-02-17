@@ -3,9 +3,9 @@
     "meta": {
       "allow_short": true,
       "attempted_signals": 359,
-      "dynamic_min_notional_enabled": true,
+      "dynamic_min_notional_enabled": false,
       "engine": "rule_based_execution",
-      "executed_signals": 0,
+      "executed_signals": 2,
       "forced_close_by_risk_control": 0,
       "instrument": "PAXG_USDT_Perp",
       "liquidation_count": 0,
@@ -13,17 +13,17 @@
       "risk_halt_global_triggered": false,
       "skipped_invalid_sl": 0,
       "skipped_min_qty": 0,
-      "skipped_missing_min_table": 358,
-      "skipped_total": 359
+      "skipped_missing_min_table": 0,
+      "skipped_total": 357
     },
     "stats": {
-      "Active Transaction Days": 0,
+      "Active Transaction Days": 3,
       "Market Open Days": 15,
-      "Max Drawdown [%]": -0.0,
-      "Sharpe Ratio": "-Inf",
-      "Total Return [%]": 0.0,
-      "Total Trades": 0,
-      "Win Rate [%]": "NaN"
+      "Max Drawdown [%]": 0.439957224283,
+      "Sharpe Ratio": -2.653990221751,
+      "Total Return [%]": -0.100702968225,
+      "Total Trades": 2,
+      "Win Rate [%]": 50.0
     }
   }
 }
