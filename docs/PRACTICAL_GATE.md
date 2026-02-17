@@ -1,6 +1,6 @@
 # Practical Gate Setup
 
-This guide defines the minimum workflow to keep `main` stable without unnecessary process overhead.
+This guide defines the default workflow to keep `main` stable with a simple, repeatable process.
 
 ## Local Workflow (Default)
 
@@ -31,19 +31,8 @@ For branch `main`, enable:
 1. Require a pull request before merging.
 2. Require status checks to pass before merging.
 3. Require branches to be up to date before merging.
-
-## Optional Hardening (Enable Later)
-
-If needed, add:
-
-1. Required status checks:
+4. Set required approvals to `0` for solo-maintainer workflow.
+5. Add required status checks when they appear in the selector:
    - `CI / test (3.10)`
    - `CI / test (3.11)`
    - `CI / test (3.12)`
-2. "Do not allow bypassing the above settings".
-3. "Restrict who can push to matching branches" (if available in your UI).
-
-## UI Notes
-
-1. Required checks may not appear until the repository has recent check history.
-2. If required checks are not selectable yet, keep status checks enabled and run `python scripts/verify.py` before merge.

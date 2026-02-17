@@ -84,6 +84,7 @@ mypy marginbt/
 ## Branch Protection (Maintainer Setup)
 
 Use `docs/PRACTICAL_GATE.md` as the source of truth for branch protection and quality gate setup.
+For solo maintenance, use: PR required + status checks required + up-to-date required + required approvals set to `0`.
 
 ## Release Process (Maintainers Only)
 
