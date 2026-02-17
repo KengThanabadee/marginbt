@@ -17,7 +17,7 @@ Thank you for your interest in contributing!  `marginbt` is a precision margin e
    ```
    This installs pinned versions of `pytest`, `ruff`, and `mypy`.
 
-3. **Enable Strict-Gate Git Hooks (recommended)**
+3. **Enable local pre-push gate (recommended)**
    Configure repository-managed hooks:
    ```bash
    python scripts/install_git_hooks.py
@@ -44,13 +44,18 @@ To ensure deterministic execution, verify results against a "gold standard" snap
 python tests/regression_snapshot.py --mode verify
 ```
 
-### One-command Strict Gate Check
+### One-command Verify Check
 
 Run the exact local quality gate used by CI:
 
 ```bash
 python scripts/verify.py
 ```
+
+This command runs:
+- `ruff check marginbt/ tests/`
+- `pytest -q`
+- `python tests/regression_snapshot.py --mode verify`
 
 ## Code Style & Linting
 
@@ -78,20 +83,11 @@ mypy marginbt/
 
 ## Branch Protection (Maintainer Setup)
 
-For `main`, configure these GitHub branch protection rules:
-
-1. Require a pull request before merging.
-2. Require status checks to pass before merging.
-   Required checks:
-   - `CI / test (3.10)`
-   - `CI / test (3.11)`
-   - `CI / test (3.12)`
-3. Require branches to be up to date before merging.
-4. Restrict who can push to matching branches (block direct pushes to `main`).
+Use `docs/PRACTICAL_GATE.md` as the source of truth for branch protection and quality gate setup.
 
 ## Release Process (Maintainers Only)
 
 1. Bump version in `marginbt/__init__.py` and `pyproject.toml`.
-2. Update `CHANGELOG.md` (if exists).
+2. Update `CHANGELOG.md`.
 3. Create a git tag: `git tag v0.1.x`.
 4. Push tag: `git push origin --tags`.
