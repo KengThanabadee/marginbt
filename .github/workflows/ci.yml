@@ -24,11 +24,5 @@ jobs:
       - name: Install dependencies
         run: pip install -e .[dev]
 
-      - name: Lint with ruff
-        run: ruff check marginbt/ tests/
-
-      - name: Run tests
-        run: pytest -q
-
-      - name: Verify regression snapshot
-        run: python tests/regression_snapshot.py --mode verify
+      - name: Verify strict gate checks
+        run: python scripts/verify.py

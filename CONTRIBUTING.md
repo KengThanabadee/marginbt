@@ -15,11 +15,18 @@ Thank you for your interest in contributing!  `marginbt` is a precision margin e
    ```bash
    pip install -e .[dev]
    ```
-   This installs `pytest`, `ruff`, and `mypy`.
+   This installs pinned versions of `pytest`, `ruff`, and `mypy`.
+
+3. **Enable Strict-Gate Git Hooks (recommended)**
+   Configure repository-managed hooks:
+   ```bash
+   python scripts/install_git_hooks.py
+   ```
+   This sets `core.hooksPath=.githooks` for this local clone and enables the `pre-push` check.
 
 ## Running Tests
 
-We use `pytest` for all tests.
+Use `pytest` for all tests.
 
 ```bash
 # Run all tests
@@ -30,16 +37,24 @@ pytest tests/test_edge_cases.py
 ```
 
 ### Regression Snapshots
-To ensure deterministic execution, we verify results against a "gold standard" snapshot.
+To ensure deterministic execution, verify results against a "gold standard" snapshot.
 
 ```bash
 # Verify behavior matches snapshot (Run this before PR!)
 python tests/regression_snapshot.py --mode verify
 ```
 
+### One-command Strict Gate Check
+
+Run the exact local quality gate used by CI:
+
+```bash
+python scripts/verify.py
+```
+
 ## Code Style & Linting
 
-We enforce strict typing and linting.
+Use strict typing and linting.
 
 ```bash
 # Lint code
@@ -60,6 +75,19 @@ mypy marginbt/
 3. **Update Docs**: If changing API, update `docs/USAGE_GUIDE.md`.
 4. **Pass CI**: Ensure `pytest`, `ruff`, and `mypy` all pass locally.
 5. **Submit PR**: Describe *what* you changed and *why*. Link to issues if applicable.
+
+## Branch Protection (Maintainer Setup)
+
+For `main`, configure these GitHub branch protection rules:
+
+1. Require a pull request before merging.
+2. Require status checks to pass before merging.
+   Required checks:
+   - `CI / test (3.10)`
+   - `CI / test (3.11)`
+   - `CI / test (3.12)`
+3. Require branches to be up to date before merging.
+4. Restrict who can push to matching branches (block direct pushes to `main`).
 
 ## Release Process (Maintainers Only)
 

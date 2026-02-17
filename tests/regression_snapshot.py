@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from marginbt import BacktestEngine
+from marginbt import BacktestEngine  # noqa: E402
 
 FIXTURE_PATH = Path(__file__).resolve().parent / "fixtures" / "regression_snapshot.json"
 
@@ -68,11 +68,11 @@ def _make_series(n: int = 360) -> dict[str, pd.Series]:
 
 
 def _normalize_scalar(value: Any) -> Any:
-    if isinstance(value, (np.bool_, bool)):
+    if isinstance(value, np.bool_ | bool):
         return bool(value)
-    if isinstance(value, (np.integer, int)):
+    if isinstance(value, np.integer | int):
         return int(value)
-    if isinstance(value, (np.floating, float)):
+    if isinstance(value, np.floating | float):
         x = float(value)
         if math.isnan(x):
             return "NaN"
@@ -116,7 +116,7 @@ def _is_close_num(left: Any, right: Any, atol: float = 1e-9) -> bool:
         return bool(left) == bool(right)
     if isinstance(left, int) and isinstance(right, int):
         return left == right
-    if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+    if isinstance(left, int | float) and isinstance(right, int | float):
         return abs(float(left) - float(right)) <= atol
     return left == right
 

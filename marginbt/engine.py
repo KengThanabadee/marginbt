@@ -237,14 +237,14 @@ class BacktestEngine:
         # --- SL: scalar -> Series ------------------------------------
         if sl_stop is None:
             sl_pct = pd.Series(0.0, index=idx, dtype="float64")
-        elif isinstance(sl_stop, (int, float)):
+        elif isinstance(sl_stop, int | float):
             sl_pct = pd.Series(float(sl_stop), index=idx, dtype="float64")
         else:
             sl_pct = sl_stop
 
         # --- TP: resolve to bb_middle-style price level or boolean ---
         if tp_price is not None:
-            if isinstance(tp_price, (int, float)):
+            if isinstance(tp_price, int | float):
                 bb_middle = pd.Series(float(tp_price), index=idx, dtype="float64")
             else:
                 bb_middle = tp_price
@@ -260,7 +260,7 @@ class BacktestEngine:
         # VBT default fill price is close.  Internal engine default is open.
         # So we pass close as override to match VBT convention.
         if price is not None:
-            if isinstance(price, (int, float)):
+            if isinstance(price, int | float):
                 price_override = pd.Series(float(price), index=idx, dtype="float64")
             else:
                 price_override = price

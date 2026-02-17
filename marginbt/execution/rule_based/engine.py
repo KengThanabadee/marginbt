@@ -190,10 +190,7 @@ def _fill_pending_signal(
         return
 
     # --- Determine raw fill price ---
-    if entry_price_override is not None:
-        raw_fill = float(entry_price_override.iloc[i])
-    else:
-        raw_fill = o  # internal default = open (backward compat)
+    raw_fill = float(entry_price_override.iloc[i]) if entry_price_override is not None else o
 
     valid_sl = bool(np.isfinite(sl_now) and sl_now > 0 and raw_fill > 0)
     if not valid_sl:
@@ -323,7 +320,7 @@ def _check_exit_conditions(
     ts: pd.Timestamp,
     o: float,
     h: float,
-    l: float,
+    low_price: float,
     c: float,
     tp_level: float,
     sl_now: float,
@@ -350,16 +347,13 @@ def _check_exit_conditions(
             if new_stop > state.position.stop_price:
                 state.position.stop_price = new_stop
         else:
-            state.position.trailing_low = min(state.position.trailing_low, l)
+            state.position.trailing_low = min(state.position.trailing_low, low_price)
             new_stop = state.position.trailing_low * (1.0 + sl_now)
             if new_stop < state.position.stop_price:
                 state.position.stop_price = new_stop
 
     # --- Resolve effective TP level ---
-    if np.isfinite(state.position.tp_price_level):
-        eff_tp = state.position.tp_price_level
-    else:
-        eff_tp = tp_level
+    eff_tp = state.position.tp_price_level if np.isfinite(state.position.tp_price_level) else tp_level
 
     # --- Check at open price ---
     open_liq = _position_equity(side, qty, state.position.entry_price, state.position.entry_margin, o) <= _maintenance_margin(
@@ -393,12 +387,12 @@ def _check_exit_conditions(
             normal_exit_price = o
     else:
         # --- Check intrabar ---
-        stop_hit = (l <= state.position.stop_price) if long_pos else (h >= state.position.stop_price)
+        stop_hit = (low_price <= state.position.stop_price) if long_pos else (h >= state.position.stop_price)
         tp_hit = (h >= eff_tp) if long_pos and np.isfinite(eff_tp) else False
         if not long_pos and np.isfinite(eff_tp):
-            tp_hit = l <= eff_tp
+            tp_hit = low_price <= eff_tp
 
-        worst_mark = l if long_pos else h
+        worst_mark = low_price if long_pos else h
         intrabar_liq = _position_equity(
             side, qty, state.position.entry_price, state.position.entry_margin, worst_mark
         ) <= _maintenance_margin(qty, worst_mark, m_cfg.maintenance_margin_rate)
@@ -782,7 +776,7 @@ def run_rule_based_execution(
 
         o = float(open_s.iloc[i])
         h = float(high_s.iloc[i])
-        l = float(low_s.iloc[i])
+        low_price = float(low_s.iloc[i])
         c = float(close_s.iloc[i])
         tp_level = float(middle_known_s.iloc[i]) if pd.notna(middle_known_s.iloc[i]) else float("nan")
         sl_now = float(sl_s.iloc[i]) if pd.notna(sl_s.iloc[i]) else float("nan")
@@ -806,7 +800,7 @@ def run_rule_based_execution(
 
         # 2. Check exit conditions
         _check_exit_conditions(
-            state, ts, o, h, l, c, tp_level, sl_now,
+            state, ts, o, h, low_price, c, tp_level, sl_now,
             sl_trail=sl_trail,
             slippage=slippage,
             fee_per_side=fee_per_side,

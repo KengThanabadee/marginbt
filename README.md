@@ -67,6 +67,18 @@ To verify regression snapshots:
 python tests/regression_snapshot.py --mode verify
 ```
 
+To run the full strict-gate checks (same command used in CI):
+
+```bash
+python scripts/verify.py
+```
+
+To enable the repository-managed pre-push hook in your local clone:
+
+```bash
+python scripts/install_git_hooks.py
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
