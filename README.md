@@ -55,29 +55,35 @@ print(result.summary())
 
 ## Running Tests
 
-To run the test suite:
+Run unit tests:
 
 ```bash
 pytest -q
 ```
 
-To verify regression snapshots:
+Verify regression snapshots:
 
 ```bash
 python tests/regression_snapshot.py --mode verify
 ```
 
-To run the full strict-gate checks (same command used in CI):
+Run the full local quality gate (same command used in CI):
 
 ```bash
 python scripts/verify.py
 ```
 
-To enable the repository-managed pre-push hook in your local clone:
+Enable repository-managed pre-push hook:
 
 ```bash
 python scripts/install_git_hooks.py
 ```
+
+## Documentation
+
+- `docs/README.md` documentation index
+- `docs/PRACTICAL_GATE.md` practical merge and quality-gate policy
+- `docs/USAGE_GUIDE.md` full API and behavior guide
 
 ## License
 
